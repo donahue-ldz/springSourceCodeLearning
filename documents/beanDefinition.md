@@ -1,0 +1,1 @@
+介绍BeanDefinition是对容器中xml定义的bean的对象描述
