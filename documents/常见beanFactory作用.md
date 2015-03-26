@@ -7,33 +7,64 @@
 从上往下：
  
 BeanFactory:BeanFactory：Spring的Bean容器最顶层的接口，定义了Ioc容器的基本规范。实现这个接口的Ioc容器都会持有一些BeanDefinition和一个唯一的字符串形式的名字。
+
 HierarchicalBeanFactory：HierarchicalBeanFactory继承BeanFactory并扩展使其支持层级结构。getParentBeanFactory()方法或者父级BeanFactory，containsLocalBean(String name)方法查看当前BeanFactory是否包含给定名字的Bean，不会递归想父级查找。
+
+
 ListableBeanFactory：同样扩展BeanFactory使其支持迭代Ioc容器持有的Bean对象。注意如果ListableBeanFactory同时也是HierarchicalBeanFactory，那么大多数情况下，只迭代当前Ioc容器持有的Bean对象，不会在体系结构中想父级递归迭代。具体情况请看API说明。
+
 ResourceLoader：Spring提供资源的根接口。在Spring Ioc中，资源被Resource引用，获得Resource对象，说明获得了资源的访问。Resource提供资源的抽象，具体资源可是从URL，classpath,file等地方获得。
+
 ResourcePatternResolver：ResourcePatternResolver是对ResourceLoader的扩展，其支持模式匹配的资源。如：classpath*:表示匹配路径下所有的资源。
+
 DefaultResourceLoader：ResourceLoader的默认实现，可以单独使用，也可以通过扩展使其支持特殊的资源，如：FileSystemResourceLoader，ClassPathXmlApplicationContext等。
+
+
 ApplicationEventPublisher：封装事件发布，通知事件监听者此Application的事件。
+
 MessageSource：处理Spring 中的消息，支持i18n和参数化消息。另外其子类ReloadableResourceBundleMessageSource支持不重启JVM刷新消息。
+
 EnvironmentCapable：实现此接口的容器将支持上下文环境。在Spring Ioc容器中，都是支持上下文环境的。
+
 ApplicationContext：从上图来看，ApplicationContext继承了上面描述的所有接口，因此ApplicationContext是一个接口集合，提供所继承接口的功能。另外，ApplicationContext在启动后是只读的，但是如果ApplicationContext实现类支持reload，也可以刷新这个ApplicationContext。
+
 Lifecycle：对BeanFactory提供生命周期支持。另外其他任何对象都可以实现Lifecycle接口开支持开始/结束控制。注意Lifecycle接口只支持顶层对象，其他的Lifecycle将被忽略。
+
 DisposableBean：DisposableBean提供了在销毁Ioc容器的时候释放资源。
+
 ConfigurableApplicationContext：提供对Ioc容器的配置的支持。包括设置父级容器，设置上下文环境，刷新容器，注册关闭容器钩子等。
+
 AbstractApplicationContext：AbstractApplicationContext是Ioc容器的抽象实现，这里实现了大部分的功能：消息，事件，刷新容器，生命周期等。AbstractApplicationContext采用模板方法模式，把一部分实现推迟到子类。
-AbstractRefreshableApplicationContext：提供多线程同时刷新容器支持，每次刷新都会产生一个内部BeanFactory(DefaultListableBeanFactory)。另外，子类要实现loadBeanDefinitions方法来正确加载Bean定义。
+
+AbstractRefreshableApplicationContext：提供多线程同时刷新容器支持，每次刷新都会产生一个内部BeanFactory(DefaultListableBeanFactory)。另外，子类要实现
+
+loadBeanDefinitions方法来正确加载Bean定义。
+
 Aware：Aware是个标记接口，实现这个接口的对象提供通知Spring容器功能。具体个通知动作来子类中定义。
+
 BeanNameAware：Aware的子接口，当设置BeanName的时候，创建通知。
+
 InitializingBean：这个接口作用是当Bean对象的属性都被设置完成或，可以立即做一些自定义的动作。令一个替代方案是设置init-method。
+
 AbstractRefreshableConfigApplicationContext：提供对容器的一些特殊设置：setConfigLocation，setBeanName，setId等。
+
 AbstractXmlApplicationContext：从XML读取Bean定义的容器，这个容器实现了loadBeanDefinitions方法，从XML资源中获得Bean定义。
+
 FileSystemXmlApplicationContext：标准的从文件系统读XML的Bean定义容器。getResourceByPath方法返回文件系统资源。
+
+---
+
 说了这么多的BeanFactory，还有一个重量级的没有说：DefaultListableBeanFactory
 DefaultListableBeanFactory包含了Ioc容器的重要内容，很多容器都会用的它。如AbstractApplicationContext.refersh()方法就会销毁内部的容器并重新创建一个DefaultListableBeanFactory作为起内部表示。DefaultListableBeanFactory则直接继承它成为从XML读取资源的Ioc容器。
 在DefaultListableBeanFactory有一个ConcurrentHashMap保存了Bean的定义。
-Java代码  收藏代码
+
+
 /** Map of bean definition objects, keyed by bean name */  
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();  
  另外附上DefaultListableBeanFactory的层级结构图：
+
+ 
+ ![image](https://github.com/donahue-ldz/springSourceCodeLearning/raw/master/documents/imgs/DefaultListableBeanFactory.png)
 
  
 
