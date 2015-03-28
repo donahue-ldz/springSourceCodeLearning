@@ -1,1 +1,12 @@
-介绍IOC初始化话过程
+##IOC初始化话过程
+容器的初始化是在refresh（）方法的调用时候执行的。此时将原来的容器销毁，然后重新创建一个DefaultListableBeanFactory
+具体包括三个部分，今天先简单做个总结，以备接下来分析的思路
+###BeanDefinition Resource的定位，就是找到系统配置的文件的地方
+通过相关的ResourceLoader找到相关的Resource对象，然后就能获取Resource接口中定义的InputStream流实现读取的作用
+
+
+###BeanDefinition 的读入
+获得相关的Resource之后 再生成先关的BeanDefinitionReader  第一步先生成Document对象，然后在委托xml对象解析成相关的BeanDefinition  解析的结果将被BeanDefinitionHolder所保存，包括Bean的其他信息，然后被注册到IOC中
+
+
+###BeanDefinition 的注册
