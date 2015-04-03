@@ -10,3 +10,4 @@
 
 
 ###BeanDefinition 的注册
+将相关的bean注册到ConcurrentHashMap  这是可以并发访问的呢
