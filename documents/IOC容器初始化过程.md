@@ -11,3 +11,10 @@
 
 ###BeanDefinition 的注册
 将相关的bean注册到ConcurrentHashMap  这是可以并发访问的呢
+
+###Xml配置文件大致读取流程
+在BeanDefinitionReader中主要包含下面几步的处理
+1. 继承abstractBeanDefinitonReader的方法，使用resourceLoade将资源转换为对应的resource文件
+2. 由documentReader 将resource文件转化问相应的document对象
+3. 由BeanDefinitionDocumentReader将document解析，并使用BeanDefinitionParaserDelegate对element解析
+
