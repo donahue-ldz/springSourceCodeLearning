@@ -21,6 +21,8 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.io.Resource;
 
+import java.net.URL;
+
 /**
  * Convenience extension of {@link DefaultListableBeanFactory} that reads bean definitions
  * from an XML document. Delegates to {@link XmlBeanDefinitionReader} underneath; effectively
@@ -78,5 +80,6 @@ public class XmlBeanFactory extends DefaultListableBeanFactory {
 		super(parentBeanFactory);
 		this.reader.loadBeanDefinitions(resource);
 	}
+    public URL
 
 }
